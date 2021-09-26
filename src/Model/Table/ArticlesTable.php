@@ -11,6 +11,10 @@ class ArticlesTable extends Table
     public function initialize(array $config)
     {
         $this->addBehavior('Timestamp');
+        // Просто добавьте связь belongsTo с таблицей CategoriesTable
+        $this->belongsTo('Categories', [
+            'foreignKey' => 'category_id',
+        ]);
     }
 
     public function validationDefault(Validator $validator)
@@ -23,4 +27,5 @@ class ArticlesTable extends Table
 
         return $validator;
     }
+
 }

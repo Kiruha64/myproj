@@ -4,6 +4,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Http\Exception\NotFoundException;
+
 
 class ArticlesController extends AppController
 {
@@ -32,13 +34,17 @@ class ArticlesController extends AppController
         if ($this->request->is('post')) {
             $article = $this->Articles->patchEntity($article, $this->request->getData());
             if ($this->Articles->save($article)) {
-                $this->Flash->success(__('Your article has been saved.'));
+                $this->Flash->success(__('Ваша статья была сохранена.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('Unable to add your article.'));
+            $this->Flash->error(__('Невозможно добавить вашу статью.'));
         }
         $this->set('article', $article);
 
+        // Просто добавляем список категорий для возможности выбора
+        // одной категории для статьи
+        $categories = $this->Articles->Categories->find('treeList');
+        $this->set(compact('categories'));
     }
     public function edit($id = null)
     {
