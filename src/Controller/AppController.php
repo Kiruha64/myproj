@@ -12,44 +12,60 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+// src/Controller/AppController.php
+
 namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
-/**
- * Application Controller
- *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @link https://book.cakephp.org/3/en/controllers.html#the-app-controller
- */
 class AppController extends Controller
 {
+    //...
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('Security');`
-     *
-     * @return void
-     */
     public function initialize()
     {
-        parent::initialize();
-
-        $this->loadComponent('RequestHandler', [
-            'enableBeforeRedirect' => false,
-        ]);
         $this->loadComponent('Flash');
+        $this->loadComponent('Auth', [
+            'authorize' => ['Controller'], // Добавили эту строку
+            'loginRedirect' => [
+                'controller' => 'Articles',
+                'action' => 'index'
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Pages',
+                'action' => 'display',
+                'home'
+            ]
+        ]);
 
-        /*
-         * Enable the following component for recommended CakePHP security settings.
-         * see https://book.cakephp.org/3/en/controllers/components/security.html
-         */
-        //$this->loadComponent('Security');
+    }
+
+    public function beforeFilter(Event $event)
+    {
+        $userrole = $this->Auth->user('role');
+        $this->set('userrole',$userrole);
+        $username = $this->Auth->user('username');
+        $this->set('username',$username);
+        $userid = $this->Auth->user('id');
+        $this->set('userid',$userid);
+//        $this->Auth->allow();
+    }
+
+    public function isAuthorized($user)
+    {
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        if (isset($user['role']) && $user['role'] === 'superadmin') {
+            return true;
+        }
+        if (isset($user['role']) && $user['role'] === 'user') {
+            return true;
+        }
+        if (isset($user['role']) && $user['role'] === '') {
+            return true;
+        }
+
     }
 }

@@ -1,20 +1,3 @@
-<div class="actions large-2 medium-3 columns">
-    <h3><?= __('Действия') ?></h3>
-
-
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('Новая Категория'), ['action' => 'add']) ?></li>
-    </ul>
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Categories'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Parent Categories'), ['controller' => 'Categories', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Parent Category'), ['controller' => 'Categories', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
-    </ul>
-
-</div>
 <div class="categories index large-10 medium-9 columns">
     <table cellpadding="0" cellspacing="0">
         <thead>

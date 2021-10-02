@@ -43,12 +43,56 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><a target="_blank" href="https://book.cakephp.org/3/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
+                <? if ($userrole == 'admin' or $userrole == 'superadmin' or $userrole == 'user'){
+
+                    echo '<li>';
+                    echo $this->Html->link('logout', ['controller'=> 'Users','action' => 'logout']);
+                    echo'</li>';
+
+                    echo '<h3 style="color: white">';
+                    echo $this->Html->link($username, ['controller'=> 'Users','action' => 'info']);
+                    echo'</h3>';
+
+                }
+                else {
+                    echo '<li>';
+                    echo $this->Html->link('Login', ['controller'=> 'Users','action' => 'login']);
+                    echo'</li>';
+
+                    echo '<li>';
+                    echo $this->Html->link('Register', ['controller'=> 'Users','action' => 'add']);
+                    echo'</li>';
+                }
+
+                ?>
+
             </ul>
         </div>
     </nav>
-    <?= $this->Flash->render() ?>
+    <?php if ($userrole != ''):?>
+    <div class="actions large-2 medium-3 columns">
+        <h3><?= __('Действия') ?></h3>
+
+
+        <ul class="side-nav">
+            <li><?= $this->Html->link(__('Новая Категория'), ['action' => 'add']) ?></li>
+        </ul>
+        <ul class="side-nav">
+            <li class="heading"><?= __('Actions') ?></li>
+
+            <?php if ($userrole == 'superadmin'):?>
+            <li><?= $this->Html->link(__('Users'),['controller' => 'Users', 'action' => 'index']) ?></li>
+            <? endif;?>
+
+            <li><?= $this->Html->link(__('List Parent Categories'), ['controller' => 'Categories', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link(__('New Parent Category'), ['controller' => 'Categories', 'action' => 'add']) ?></li>
+            <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?></li>
+            <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
+        </ul>
+
+    </div>
+    <? endif;?>
+    <?php $this->Flash->render() ?>
     <div class="container clearfix">
         <?= $this->fetch('content') ?>
     </div>

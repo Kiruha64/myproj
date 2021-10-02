@@ -27,6 +27,11 @@ class CreateArticles extends AbstractMigration
             'limit' => 11,
             'null' => false,
         ]);
+        $table->addColumn('user_id', 'integer', [
+            'default' => true,
+            'limit' => 11,
+            'null' => false,
+        ]);
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false,
