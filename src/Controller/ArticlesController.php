@@ -4,13 +4,13 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 use Cake\Http\Exception\NotFoundException;
 use function React\Promise\all;
 use Cake\ORM\TableRegistry;
 
 
-class ArticlesController extends AppController
-{
+class ArticlesController extends AppController{
 
     public function initialize()
     {
@@ -107,7 +107,7 @@ class ArticlesController extends AppController
 
     public function isAuthorized($user)
     {
-        parent::isAuthorized($user);
+//        parent::isAuthorized($user);
 
         if (isset($user['role']) && $user['role'] === 'admin') {
             return true;
@@ -140,7 +140,21 @@ class ArticlesController extends AppController
             }
         }
 
+
 //         parent::isAuthorized($user);
+    }
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        // Разрешить пользователям регистрироваться и выходить из системы.
+        // Вы не должны добавлять действие «login», чтобы разрешить список.
+        // Это может привести к проблемам с нормальным функционированием
+
+//        if ($this->Auth->user('role') == 'admin'){
+//            $this->Auth->deny('index');
+//        }
+
+
     }
 }
 

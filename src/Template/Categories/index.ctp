@@ -3,13 +3,12 @@
         <thead>
         <tr>
             <th>Id</th>
-            <th>Id Родителя</th>
+            <th>Parent id</th>
             <th>Lft</th>
             <th>Rght</th>
-            <th>Имя</th>
-            <th>Описание</th>
-            <th>Создано</th>
-            <th class="actions"><?= __('Действия') ?></th>
+            <th>Category name</th>
+            <th>Title</th>
+            <th>Created</th>
         </tr>
         </thead>
         <tbody>

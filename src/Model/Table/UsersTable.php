@@ -5,6 +5,8 @@ namespace App\Model\Table;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\RulesChecker;  //як варіант для унікальності імен
+use Cake\ORM\Rule\IsUnique;
+
 
 class UsersTable extends Table
 {
@@ -14,21 +16,29 @@ class UsersTable extends Table
     {
 
         return $validator
-            ->notEmpty('username', 'A username is required')
-            ->notEmpty('password', 'A password is required')
-            ->notEmpty('role', 'A role is required')
+            ->notEmpty('name', 'A username is required')
             ->add(
-                'username',
+                'name',
                 ['unique' => [
                     'rule' => 'validateUnique',
                     'provider' => 'table',
                     'message' => 'This name already using,select another name']
                 ]
             )
-            ->add('role', 'inList', [
-                'rule' => ['inList', ['admin', 'user','superadmin']],
-                'message' => 'Please enter a valid role'
-            ]);
+            ->notEmpty('email', 'A username is required')
+            ->add(
+                'email', 
+                ['unique' => [
+                    'rule' => 'email',
+                    'provider' => 'table',
+                    'message' => 'This email already using,select another name']
+                ]
+            )
+            ->notEmpty('password', 'A password is required');
+//            ->add('role', 'inList', [
+//                'rule' => ['inList', ['admin', 'user','superadmin']],
+//                'message' => 'Please enter a valid role'
+//            ]);
 
 
     }
@@ -36,11 +46,15 @@ class UsersTable extends Table
 
 
     // як варіант для унікальності
-//    public function buildRules(RulesChecker $rules)
-//    {
-//        $rules->add($rules->isUnique(['username'], 'User already exist.'));
-//        return $rules;
-//    }
+
+
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['email'], 'email already exist.'));
+        $rules->add($rules->isUnique(['name'], 'name already exist.'));
+
+        return $rules;
+    }
 
 
 }

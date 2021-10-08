@@ -91,10 +91,20 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 
 
-    $routes->connect('/articles', ['controller' => 'Articles', 'action' => 'index']);
-    $routes->connect('/articles', ['controller' => 'Articles', 'action' => 'view']);
+    $routes->connect('users', ['controller' => 'Users', 'action' => 'index']);
+    $routes->connect('login', ['controller' => 'Users', 'action' => 'login']);
 
-    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('user/articles', ['controller' => 'Articles', 'action' => 'view']);
+
+
+    $routes->connect('/dsa', ['controller' => 'Home', 'action' => 'index']);
+    $routes->connect('/', ['controller' => 'Posts', 'action' => 'index']);
+
+
+
+
+//    $routes->connect('/users/login', ['controller' => 'Users', 'action' => 'login']);
+
 
 
 

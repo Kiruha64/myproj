@@ -4,14 +4,16 @@
     <?= $this->Flash->render() ?>
     <?= $this->Form->create() ?>
     <fieldset>
-        <legend><?= __('Please enter your username and password') ?></legend>
-        <?= $this->Form->control('username') ?>
+        <legend><?= __('Please enter your name,email and password') ?></legend>
+        <?= $this->Form->control('name') ?>
+        <?= $this->Form->control('email') ?>
         <?= $this->Form->control('password') ?>
     </fieldset>
     <?= $this->Form->button(__('Login')); ?>
     <?= $this->Form->end() ?>
 </div>
 
+
 <div>
-    <p><?= $this->Html->link('Register', ['action' => 'add']) ?></p>
+    <p><?= $this->Html->link('I forgot my password', ['action' => 'identify']) ?></p>
 </div>

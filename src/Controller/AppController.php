@@ -26,46 +26,56 @@ class AppController extends Controller
     public function initialize()
     {
         $this->loadComponent('Flash');
-        $this->loadComponent('Auth', [
-            'authorize' => ['Controller'], // Добавили эту строку
-            'loginRedirect' => [
-                'controller' => 'Articles',
-                'action' => 'index'
-            ],
-            'logoutRedirect' => [
-                'controller' => 'Pages',
-                'action' => 'display',
-                'home'
-            ]
-        ]);
+//        $this->loadComponent('Auth', [
+//            'authorize' => ['Controller'], // Добавили эту строку
+//            'loginRedirect' => [
+//                'controller' => 'Articles',
+//                'action' => 'index'
+//            ],
+//            'logoutRedirect' => [
+//                'controller' => 'Pages',
+//                'action' => 'display',
+//                'home'
+//            ]
+//        ]);
 
     }
 
-    public function beforeFilter(Event $event)
-    {
-        $userrole = $this->Auth->user('role');
-        $this->set('userrole',$userrole);
-        $username = $this->Auth->user('username');
-        $this->set('username',$username);
-        $userid = $this->Auth->user('id');
-        $this->set('userid',$userid);
-//        $this->Auth->allow();
-    }
+//    public function beforeFilter(Event $event)
+//    {
+//        $userrole = $this->Auth->user('role');
+//        $this->set('userrole',$userrole);
+//        $username = $this->Auth->user('username');
+//        $this->set('username',$username);
+//        $userid = $this->Auth->user('id');
+//        $this->set('userid',$userid);
+////        $this->Auth->allow();
+//        $this->viewBuilder()->setLayout('admin');
+//
+//    }
 
-    public function isAuthorized($user)
-    {
-        if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-        }
-        if (isset($user['role']) && $user['role'] === 'superadmin') {
-            return true;
-        }
-        if (isset($user['role']) && $user['role'] === 'user') {
-            return true;
-        }
-        if (isset($user['role']) && $user['role'] === '') {
-            return true;
-        }
-
-    }
+//    public function isAuthorized($user)
+//    {
+////        if (isset($user['role']) && $user['role'] === 'admin') {
+//////            return true;
+////            $this->Auth->allow('index');
+////
+////        }
+////        if (isset($user['role']) && $user['role'] === 'superadmin') {
+////            return true;
+////        }
+////
+//////
+////
+////            if ($this->request->getParam('controller' ) == 'Users' and $this->request->getParam('action' ) == 'newpassword') {
+////                return true;
+////            }
+////
+////        if ($this->request->getParam('controller' ) == 'Users' and $this->request->getParam('action' ) == 'identify') {
+////            return true;
+////        }
+//        return true;
+//
+//
+//    }
 }

@@ -4,12 +4,10 @@
     <?= $this->Form->create($user) ?>
     <fieldset>
         <legend><?= __('Add User') ?></legend>
-        <?= $this->Form->control('username') ?>
+        <?= $this->Form->control('name') ?>
+        <?= $this->Form->control('email') ?>
         <?= $this->Form->control('password') ?>
-        <?= $this->Form->control('role', [
-            'options' => ['admin' => 'Admin', 'user' => 'User',  'superadmin' => 'SuperAdmin']
-        ]) ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')); ?>
+    <?= $this->Form->button('Register'); ?>
     <?= $this->Form->end() ?>
 </div>
