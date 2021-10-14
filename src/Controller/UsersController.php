@@ -3,75 +3,26 @@
 
 namespace App\Controller;
 
-use App\Controller\AppController;
-use App\Model\Entity\User;
-use Cake\Event\Event;
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use Cake\Utility\Security;
-use phpDocumentor\Reflection\Element;
+use function React\Promise\all;
 
 
 class UsersController extends AppController
 {
 
     //вивід з меншого айді до більшого ліміт 100
-    public $paginate = [
-        'maxLimit' => 100,
-        'order' => [
-            'Users.id' => 'asc'
-        ]
-    ];
+//    public $paginate = [
+//        'maxLimit' => 100,
+//        'order' => [
+//            'Users.id' => 'asc'
+//        ]
+//    ];
     public function index()
     {
-        $this->set('users', $this->paginate());
-
-
-    }
-    public function edit($id = null){
-        $user = $this->Users->get($id);
-        if ($this->request->is(['post', 'put'])) {
-            $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('User info has been edit.'));
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('Ошибка обновления вашей статьи.'));
-        }
-        $this->set('user' , $user);
-    }
-
-    public function delete($id){
-        $this->request->allowMethod(['post', 'delete']);
-
-        $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('Статья с id: {0} была удалена.', h($id)));
-            return $this->redirect(['action' => 'index']);
-        }
-    }
-
-
-    public function initialize()
-    {
-
-        parent::initialize();
-        $this->loadComponent('Paginator');
-
-    }
-
-    public function info()
-    {
-        $userid = $this->Auth->user('id');
-        $this->set('userid',$userid);
-        $usercreated = $this->Auth->user('created');
-        $this->set('usercreated',$usercreated);
-    }
-
-    public function view($id)
-    {
-        $user = $this->Users->get($id);
-        $this->set(compact('user'));
+        $this->set('name', $this->Auth->user('name'));
     }
 
 
@@ -84,13 +35,15 @@ class UsersController extends AppController
 
             $username = $this->request->getData('name');
             $useremail = $this->request->getData('email');
-            $userpass = Security::hash($this->request->getData('password'), 'sha256','false');
+            $userpass = ($this->request->getData('password'));
             $usertoken = Security::hash(Security::randomBytes(32));
 
             $user->name = $username;
+            $user->role = 'user';
             $user->email = $useremail;
             $user->password = $userpass;
             $user->token = $usertoken;
+
             $user->created_at = date('Y-m-d H:i:s');
             $user->updated_at = date('Y-m-d H:i:s');
 
@@ -99,30 +52,29 @@ class UsersController extends AppController
                 $this->Flash->set('Successful registry!' ,['element'=>'success']);
 
 
-//                Email::configTransport('mailtrap', [
-//                    'host' => 'localhost',
-//                    'port' => 25,
-//                    'username' => 'root',
-//                    'password' => '',
-//                    'className' => 'Smtp'
-//                ]);
-//                $email = new Email('default');
-//                $email->transport('mailtrap');
-//                $email->emailFormat('html');
-//                $email->from('topsinpw@gmail.com', 'Kiruha64');
-//                $email->subject('Confirm your email to activation your account');
-//                $email->to($useremail);
-//                $email->send('hello '.$username. '<br> Pleas click here to conform your account<br/>
-//                <a href="http://myproj/users/verification/'.$usertoken.'">Verificate</a>
-//                <br>Thank you<br/>
-//');
+                Email::configTransport('mailtrap', [
+                    'host' => 'smtp.mailtrap.io',
+                    'port' => 2525,
+                    'username' => 'dbc651ae35924b',
+                    'password' => '88b3e51b5d131d',
+                    'className' => 'Smtp'
+                ]);
+                $email = new Email('default');
+                $email->transport('mailtrap');
+                $email->emailFormat('html');
+                $email->from('topsinpw@gmail.com', 'Kiruha64');
+                $email->subject('Confirm your email to activation your account');
+                $email->to($useremail);
+                $email->send('hello '.$username. '<br> Pleas click here to conform your account<br/>
+                <a href="http://myproj/users/verification/'.$usertoken.'">Verificate</a>
+                <br>Thank you<br/>');
 
             }
             else{
                 $this->Flash->set('Error registry!',['element'=>'error']);
             }
         }
-        $this->set('user', $this->Auth->user('all'));
+//        $this->set('user', $this->Auth->user('all'));
 
 
     }
@@ -139,27 +91,78 @@ class UsersController extends AppController
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
-                if (isset($user['role']) && $user['role'] === 'superadmin'){
-                return $this->redirect($this->Auth->redirectUrl($this->redirect(['action' => 'index'])));
-                }
-                else{
-                    return $this->redirect($this->Auth->redirectUrl($this->redirect(['controller' => 'Articles', 'action'=>'index'])));
-                }
+                return $this->redirect($this->Auth->redirectUrl());
             }
             else{
-                $this->Flash->error(__('Invalid username or password, try again'));
+                $this->Flash->error(__('Invalid email or password, try again'));
+            }
+        }
+    }
+
+    public function forgotpassword(){
+        if ($this->request->is('post')){
+            $myemail = $this->request->getData('email');
+            $token = Security::hash(Security::randomBytes(25));
+
+            $userTable = TableRegistry::get('Users');
+            $user = $userTable->find('all')->where(['email'=>$myemail])->first();
+            $user->password = '';
+            $user->token = $token;
+            if ($userTable->save($user)){
+                $this->Flash->success('Reset password link has been sent to your email('.$myemail.')!');
+
+
+                Email::configTransport('mailtrap', [
+                    'host' => 'smtp.mailtrap.io',
+                    'port' => 2525,
+                    'username' => 'dbc651ae35924b',
+                    'password' => '88b3e51b5d131d',
+                    'className' => 'Smtp'
+                ]);
+
+                $email = new Email('default');
+                $email->transport('mailtrap');
+                $email->emailFormat('html');
+                $email->from('topsinpw@gmail.com', 'Kiruha64');
+                $email->subject('Password reset confirm');
+                $email->to($myemail);
+                $email->send('hello '.$myemail.'<br> Pleas click here to reset your password<br/>
+                <a href="http://myproj/users/resetpassword/'.$token.'">Reset Password</a>
+                <br>Thank you<br/>');
 
             }
         }
-        $this->viewBuilder()->setLayout('default');
-
     }
 
+    public function resetpassword($token){
+        if ($this->request->is('post')){
+            $mypassword =($this->request->getData('password'));
+
+            $userTable = TableRegistry::get('Users');
+            $user = $userTable->find('all')->where(['token'=>$token])->first();
+            $user->password = $mypassword;
+            if ($userTable->save($user)){
+                return $this->redirect(['action'=>'login']);
+            }
+        }
+    }
 
     public function logout()
     {
-        return $this->redirect($this->Auth->logout($this->redirect(['action ' => 'login'])));
+        return $this->redirect($this->Auth->logout());
     }
+
+
+    public function profile(){
+        $userTable = TableRegistry::get('Users');
+
+        $user = $userTable->find('all')->where(['id'=>$this->Auth->user('id')])->first();
+
+        $this->set('user',$user);
+
+
+    }
+
 
 
 //    public function isAuthorized($user){

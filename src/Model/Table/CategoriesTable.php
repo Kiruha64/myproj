@@ -9,9 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Categories Model
  *
- * @property \App\Model\Table\CategoriesTable&\Cake\ORM\Association\BelongsTo $ParentCategories
  * @property \App\Model\Table\ArticlesTable&\Cake\ORM\Association\HasMany $Articles
- * @property \App\Model\Table\CategoriesTable&\Cake\ORM\Association\HasMany $ChildCategories
  *
  * @method \App\Model\Entity\Category get($primaryKey, $options = [])
  * @method \App\Model\Entity\Category newEntity($data = null, array $options = [])
@@ -23,7 +21,6 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Category findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
- * @mixin \Cake\ORM\Behavior\TreeBehavior
  */
 class CategoriesTable extends Table
 {
@@ -42,18 +39,9 @@ class CategoriesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Tree');
 
-        $this->belongsTo('ParentCategories', [
-            'className' => 'Categories',
-            'foreignKey' => 'parent_id',
-        ]);
-        $this->hasMany('Articles', [
+        $this->hasMany('ArticlesCategories', [
             'foreignKey' => 'category_id',
-        ]);
-        $this->hasMany('ChildCategories', [
-            'className' => 'Categories',
-            'foreignKey' => 'parent_id',
         ]);
     }
 
@@ -63,38 +51,24 @@ class CategoriesTable extends Table
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
+//    public function validationDefault(Validator $validator)
+//    {
+//        $validator
+//            ->integer('id')
+//            ->allowEmptyString('id', null, 'create');
+//
+//        $validator
+//            ->scalar('name')
+//            ->maxLength('name', 100)
+//            ->requirePresence('name', 'create')
+//            ->notEmptyString('name');
+//
+//        return $validator;
+
+//    }
     public function validationDefault(Validator $validator)
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', null, 'create');
-
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 100)
-//            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
-
-        $validator
-            ->scalar('description')
-            ->maxLength('description', 255)
-//            ->requirePresence('description', 'create')
-            ->notEmptyString('description');
-
+        $validator->requirePresence(['name']);
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['parent_id'], 'ParentCategories'));
-
-        return $rules;
     }
 }

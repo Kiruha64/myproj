@@ -25,45 +25,47 @@ class AppController extends Controller
 
     public function initialize()
     {
+        parent::initialize();
         $this->loadComponent('Flash');
-//        $this->loadComponent('Auth', [
-//            'authorize' => ['Controller'], // Добавили эту строку
-//            'loginRedirect' => [
-//                'controller' => 'Articles',
-//                'action' => 'index'
-//            ],
-//            'logoutRedirect' => [
-//                'controller' => 'Pages',
-//                'action' => 'display',
-//                'home'
-//            ]
-//        ]);
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Form'=>[
+                    'fields'=>['username'=>'email', 'password'=>'password'],
+                    'scope'=>['verified'=>'1'],
+                    'userModel'=> 'Users'
+                ]
+            ], // Добавили эту строку
+            'loginRedirect' => [
+                'controller' => 'Users',
+                'action' => 'index'
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Users',
+                'action' => 'login',
+            ],
+            'storage'=>'Session',
+        ]);
 
     }
 
-//    public function beforeFilter(Event $event)
-//    {
-//        $userrole = $this->Auth->user('role');
-//        $this->set('userrole',$userrole);
-//        $username = $this->Auth->user('username');
-//        $this->set('username',$username);
-//        $userid = $this->Auth->user('id');
-//        $this->set('userid',$userid);
-////        $this->Auth->allow();
-//        $this->viewBuilder()->setLayout('admin');
-//
-//    }
+    public function beforeFilter(Event $event)
+    {
+        $this->Auth->allow(['verification','logout','register','forgotpassword','resetpassword']);
+
+        $user_id = $this->Auth->user('id');
+        $this->set('user_id',$user_id);
+    }
 
 //    public function isAuthorized($user)
 //    {
-////        if (isset($user['role']) && $user['role'] === 'admin') {
-//////            return true;
-////            $this->Auth->allow('index');
-////
+////        if ($this->request->getParam('prefix') === 'admin') {
+////            return (bool)($user['role'] === 'admin');
 ////        }
-////        if (isset($user['role']) && $user['role'] === 'superadmin') {
+////        if ($this->request->getParam('controller' ) == 'Home' and $this->request->getParam('action' ) == 'index') {
 ////            return true;
 ////        }
+//
 ////
 //////
 ////
@@ -74,8 +76,5 @@ class AppController extends Controller
 ////        if ($this->request->getParam('controller' ) == 'Users' and $this->request->getParam('action' ) == 'identify') {
 ////            return true;
 ////        }
-//        return true;
-//
-//
 //    }
 }

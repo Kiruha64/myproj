@@ -1,35 +1,49 @@
-<div class="categories index large-10 medium-9 columns">
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Parent id</th>
-            <th>Lft</th>
-            <th>Rght</th>
-            <th>Category name</th>
-            <th>Title</th>
-            <th>Created</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($categories as $category): ?>
-            <tr>
-                <td><?= $category->id ?></td>
-                <td><?= $category->parent_id ?></td>
-                <td><?= $category->lft ?></td>
-                <td><?= $category->rght ?></td>
-                <td><?= h($category->name) ?></td>
-                <td><?= h($category->description) ?></td>
-                <td><?= h($category->created) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('Просмотреть'), ['action' => 'view', $category->id]) ?>
-                    <?= $this->Html->link(__('Изменить'), ['action' => 'edit', $category->id]) ?>
-                    <?= $this->Form->postLink(__('Удалить'), ['action' => 'delete', $category->id], ['confirm' => __('Вы уверены, что хотите удалить # {0}?', $category->id)]) ?>
-                    <?= $this->Form->postLink(__('Сместить вниз'), ['action' => 'moveDown', $category->id], ['confirm' => __('Вы уверены, что хотите сдвинуть категорию вниз # {0}?', $category->id)]) ?>
-                    <?= $this->Form->postLink(__('Сместить вверх'), ['action' => 'moveUp', $category->id], ['confirm' => __('Вы уверены, что хотите сдвинуть категорию вверх # {0}?', $category->id)]) ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+<div class="row">
+    <div class="col-md-3">
+        <h3><?= $title ?></h3>
+    </div>
+    <div class="col-md-6">
+        <form action="<?= $this->Url->build(['action'=>'search'])?>"method="get">
+            <div class="input-group">
+                <input type="search" name="search" class="form-control">
+                <div class="input-group-prepend">
+                    <button class="btn btn-primary input-group-text"type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3 text-right">
+        <?= $this->Html->link('Add Category', ['controller'=> $controller, 'action' => 'add'], ['class'=>'btn btn-primary'])?>
+    </div>
 </div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr style="border-bottom: 1px solid #ebebec">
+        <th>ID</th>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Modified</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody style="border-top: 0">
+    <?php foreach ($categories as $category): ?>
+        <tr>
+            <td><?= $category->id ?></td>
+            <td><?= ($category->name) ?></td>
+            <td><?= ($category->created) ?></td>
+            <td><?= ($category->modified) ?></td>
+
+            <td>
+                <?= $this->Html->link('Edit', ['controller'=> 'Categories', 'action' => 'edit', $category->id], ['class'=>'btn btn-warning'])?>
+                <?= $this->Form->postLink('Delete', ['controller'=> 'Categories', 'action' => 'delete', $category->id], ['class'=>'btn btn-danger','confirm'=>'Are you sure?'])?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+
+
+    </tbody>
+</table>
+
+

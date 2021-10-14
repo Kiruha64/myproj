@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateCategories extends AbstractMigration
+class CreateArticles extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,30 +12,40 @@ class CreateCategories extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('categories');
-        $table->addColumn('parent_id', 'integer', [
-            'default' => true,
+        $table = $this->table('articles');
+        $table->addColumn('title', 'string', [
+            'default' => null,
+            'limit' => 255,
+            'null' => false,
+        ]);
+        $table->addColumn('body', 'text', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('img_name', 'text', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('img_path', 'text', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('file_name', 'text', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('file_path', 'text', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('category_id', 'integer', [
+            'default' => null,
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addColumn('lft', 'integer', [
+        $table->addColumn('user_id', 'integer', [
             'default' => null,
-            'limit' => 10,
-            'null' => false,
-        ]);
-        $table->addColumn('rght', 'integer', [
-            'default' => null,
-            'limit' => 10,
-            'null' => false,
-        ]);
-        $table->addColumn('name', 'string', [
-            'default' => null,
-            'limit' => 100,
-            'null' => false,
-        ]);
-        $table->addColumn('description', 'string', [
-            'default' => null,
-            'limit' => 255,
+            'limit' => 11,
             'null' => false,
         ]);
         $table->addColumn('created', 'datetime', [
@@ -49,3 +59,4 @@ class CreateCategories extends AbstractMigration
         $table->create();
     }
 }
+

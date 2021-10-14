@@ -90,15 +90,46 @@ Router::scope('/', function (RouteBuilder $routes) {
      */
     $routes->fallbacks(DashedRoute::class);
 
+    $routes->connect('users/index', ['controller' => 'Users', 'action' => 'index']);
+    $routes->connect('users/login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('users/register', ['controller' => 'Users', 'action' => 'register']);
+    $routes->connect('users/logout', ['controller' => 'Users', 'action' => 'logout']);
+    $routes->connect('users/profile', ['controller' => 'Users', 'action' => 'profile']);
+    $routes->connect('users/verification', ['controller' => 'Users', 'action' => 'verification']);
+    $routes->connect('users/forgotpassword', ['controller' => 'Users', 'action' => 'forgotpassword']);
+    $routes->connect('users/resetpassword', ['controller' => 'Users', 'action' => 'resetpassword']);
 
-    $routes->connect('users', ['controller' => 'Users', 'action' => 'index']);
-    $routes->connect('login', ['controller' => 'Users', 'action' => 'login']);
+    $routes->connect('categories/index', ['controller' => 'Categories', 'action' => 'index']);
+//    $routes->connect('category/index', ['controller' => 'Category', 'action' => 'index']);
+
+
+
+
 
     $routes->connect('user/articles', ['controller' => 'Articles', 'action' => 'view']);
 
 
-    $routes->connect('/dsa', ['controller' => 'Home', 'action' => 'index']);
-    $routes->connect('/', ['controller' => 'Posts', 'action' => 'index']);
+    $routes->connect('/', ['controller' => 'Home', 'action' => 'index']);
+    $routes->connect('/view', ['controller' => 'Home', 'action' => 'view']);
+    $routes->connect('/download', ['controller' => 'Articles', 'action' => 'download']);
+
+    $routes->connect('/films', ['controller' => 'Home', 'action' => 'films']);
+    $routes->connect('/serials', ['controller' => 'Home', 'action' => 'serials']);
+    $routes->connect('/cartoons', ['controller' => 'Home', 'action' => 'cartoons']);
+
+
+
+
+
+    $routes->connect('/posts', ['controller' => 'Posts', 'action' => 'index']);
+    $routes->connect('/posts/add', ['controller' => 'Posts', 'action' => 'add']);
+    $routes->connect('/posts/edit', ['controller' => 'Posts', 'action' => 'edit']);
+    $routes->connect('/posts/delete', ['controller' => 'Posts', 'action' => 'delete']);
+    $routes->connect('/posts/search', ['controller' => 'Posts', 'action' => 'search']);
+
+
+    $routes->connect('/files/add', ['controller' => 'Files', 'action' => 'add']);
+
 
 
 

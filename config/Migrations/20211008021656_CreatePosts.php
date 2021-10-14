@@ -13,12 +13,12 @@ class CreatePosts extends AbstractMigration
     public function change()
     {
         $table = $this->table('posts');
-        $table->addColumn('name', 'string', [
+        $table->addColumn('name', 'text', [
             'default' => null,
             'limit' => 255,
             'null' => false,
         ]);
-        $table->addColumn('detail', 'stritng', [
+        $table->addColumn('detail', 'text', [
             'default' => null,
             'limit' => 255,
             'null' => false,

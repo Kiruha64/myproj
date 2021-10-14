@@ -14,7 +14,7 @@ class User extends Entity
         'id' => false
     ];
 
-    // ...
+    // або всюди підключати йогог або тут тіки
 
     protected function _setPassword($password)
     {

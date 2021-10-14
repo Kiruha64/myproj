@@ -4,32 +4,25 @@
  * @var \App\Model\Entity\Category $category
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $category->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $category->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Categories'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Parent Categories'), ['controller' => 'Categories', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Parent Category'), ['controller' => 'Categories', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Articles'), ['controller' => 'Articles', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Article'), ['controller' => 'Articles', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="categories form large-9 medium-8 columns content">
-    <?= $this->Form->create($category) ?>
-    <fieldset>
-        <legend><?= __('Edit Category') ?></legend>
-        <?php
-            echo $this->Form->control('parent_id', ['options' => $parentCategories]);
-            echo $this->Form->control('name');
-            echo $this->Form->control('description');
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <?php echo $this->Flash->render()?>
+        <div class="card">
+            <h3 class="card-header">Add Category</h3>
+            <div class="card-body">
+                <?php echo $this->Form->create()?>
+                <div class="form-group">
+                    <?= $this->Form->input('name',['value'=> $category_name ,'class' =>'form-control']) ?>
+                </div>
+                <?= $this->Form->button('Submit',['class'=>'btn btn-success']) ?>
+                <?= $this->Html->link('Back' ,['action'=>'index'], ['class'=>'btn btn-primary']) ?>
+                <?= $this->Form->end() ?>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+

@@ -15,7 +15,15 @@ class ArticlesTable extends Table
         $this->belongsTo('Categories', [
             'foreignKey' => 'category_id',
         ]);
+        $this->belongsTo('users', [
+            'foreignKey' => 'user_id',
+        ]);
+
+        $this->hasMany('ArticlesCategories', [
+            'foreignKey' => 'article_id',
+        ]);
     }
+
 
     public function validationDefault(Validator $validator)
     {
@@ -27,9 +35,9 @@ class ArticlesTable extends Table
 
         return $validator;
     }
-    public function isOwnedBy($articleId, $userId)
-    {
-        return $this->exists(['id' => $articleId, 'user_id' => $userId]);
-    }
+//    public function isOwnedBy($articleId, $userId)
+//    {
+//        return $this->exists(['id' => $articleId, 'user_id' => $userId]);
+//    }
 
 }

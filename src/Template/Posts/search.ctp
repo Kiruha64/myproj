@@ -5,7 +5,7 @@
     <div class="col-md-6">
         <form action="<?= $this->Url->build(['action'=>'search'])?>"method="get">
             <div class="input-group">
-                <input type="search" name="search" class="form-control">
+                <input type="search" name="search" class="form-control"/>
                 <div class="input-group-prepend">
                     <button class="btn btn-primary input-group-text"type="submit">Search</button>
                 </div>
@@ -34,14 +34,13 @@
             <td><?= $post->name?></td>
             <td><?= $post->detail?></td>
             <td><?= $post->created?></td>
-            <td><?= $post->modified?></td>
+            <td><?= $post->Modified?></td>
             <td>
                 <?= $this->Html->link('Edit', ['controller'=> 'Posts', 'action' => 'edit', $post->id], ['class'=>'btn btn-warning'])?>
                 <?= $this->Form->postLink('Delete', ['controller'=> 'Posts', 'action' => 'delete', $post->id], ['class'=>'btn btn-danger','confirm'=>'Are you sure?'])?>
             </td>
         </tr>
     <?php endforeach; ?>
-
     </tbody>
 </table>
 <?php
